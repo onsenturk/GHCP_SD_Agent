@@ -6,7 +6,7 @@ A feature, fix, or change is NOT complete unless ALL of the following are satisf
 
 ## 1. Engineering Standards Compliance
 
-- Implementation complies with ai/engineering-standards.md.
+- Implementation complies with agents/engineering-standards.md.
 - No architectural violations introduced.
 - No cross-layer imports.
 - No business logic inside controllers.
