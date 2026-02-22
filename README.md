@@ -52,3 +52,9 @@ In short: this repository is a **policy + process layer** for implementation qua
 ## Status
 
 Initial baseline documentation and governance templates are in place.
+
+
+## Usage
+Create new feature with feature request template
+Change request with change request template
+Copilot-instructions.md should be under .github directory
