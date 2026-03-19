@@ -80,8 +80,10 @@ If no tests exist, add minimal coverage for new logic.
 
 - Infrastructure changes defined in Bicep or Terraform.
 - No manual cloud configuration.
-- Deployment tested in staging before production.
+- **Copilot must NOT deploy infrastructure autonomously** — deployment requires explicit user approval.
+- Deployment tested in staging before production (by the user or CI/CD pipeline).
 - Estimated monthly cost documented for new resources.
+- `azure.md` referenced for tenant/subscription/resource group context.
 
 ---
 

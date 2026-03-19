@@ -11,6 +11,13 @@ All code, documentation, infrastructure, and deployments must comply.
 
 ## 1. Platform & Deployment Strategy
 
+### Azure Safety
+
+- **Copilot and agents MUST NOT create, update, or delete Azure resources autonomously.**
+- Infrastructure changes must be authored as IaC (Bicep/Terraform) locally — never applied without explicit user approval.
+- Read-only Azure operations (queries, documentation lookups, cost estimation) are permitted.
+- All Azure work must reference `azure.md` in the repository root for tenant, subscription, and resource group context.
+
 ### Backend
 
 - Azure is the default and only cloud provider unless explicitly approved.
