@@ -22,7 +22,7 @@ All code, documentation, infrastructure, and deployments must comply.
 
 - Azure is the default and only cloud provider unless explicitly approved.
 - Prefer managed services over self-hosted infrastructure.
-- **Bicep is the primary IaC language.** Terraform is acceptable when Bicep is not feasible or when the team has existing Terraform investment. Both must follow Azure Verified Modules (AVM) best practices.
+- IaC standards (Bicep, Terraform, AVM) are defined in the **Infrastructure as Code** section below.
 - No AWS/GCP services unless explicitly required and documented.
 
 Default service choices:
@@ -32,6 +32,89 @@ Default service choices:
 - Database: PostgreSQL Flexible Server or CosmosDB
 - Storage: Azure Storage (Blob)
 - Secrets: Azure Key Vault
+
+### Infrastructure as Code (IaC)
+
+#### General Principles
+
+- **Bicep is the primary IaC language.** Terraform is acceptable when Bicep is not feasible or when the team has existing Terraform investment.
+- Prefer modules over large, flat configurations. Use one module per folder.
+- Use an environment-based layout to separate configuration per stage (dev, prd, etc.).
+- Never hardcode environment-specific values in modules — pass them via parameters or variables.
+
+#### Azure Verified Modules (AVM)
+
+- **AVM modules are the default choice.** When an AVM module exists for a resource type, use it instead of writing custom resource definitions.
+- Query available AVM modules before writing new resource code. AVM modules are published on the [Public Bicep Registry](https://azure.github.io/Azure-Verified-Modules/) and [Terraform Registry](https://registry.terraform.io/).
+- Reference Bicep AVM modules via the public registry: `br/public:avm/res/<provider>/<resource>:<version>` (resource modules) or `br/public:avm/ptn/<pattern>:<version>` (pattern modules).
+- Reference Terraform AVM modules via the Terraform Registry: `source = "Azure/avm-res-<provider>-<resource>/azurerm"`.
+- **Pin exact versions** (e.g., `0.4.0`). Do not use floating version ranges.
+- When using AVM modules, configure the following interfaces where applicable:
+  - **Diagnostics** — send logs/metrics to Log Analytics or Application Insights.
+  - **RBAC** — assign least-privilege roles via the module's `role_assignments` parameter.
+  - **Locks** — apply resource locks for production resources.
+  - **Private Endpoints** — use when the resource supports it and the architecture requires private networking.
+  - **Managed Identity** — prefer system-assigned or user-assigned managed identity over connection strings.
+  - **Tags** — always pass a standard set of tags (environment, project, owner).
+- **Fallback:** If no AVM module exists for a resource type, write custom Bicep/Terraform following AVM interface conventions (parameters for diagnostics, RBAC, tags, locks). Document the gap so it can be replaced when an AVM module becomes available.
+
+#### Bicep Standards
+
+- Use `main.bicep` as the entrypoint per environment/module.
+- Use `.bicepparam` files for parameter values — not JSON parameter files.
+- Prefer User-defined types over open types (`object`, `array`).
+- Use `@secure()` for sensitive parameters.
+- Use symbolic references (`resource.id`) instead of `resourceId()` / `reference()`.
+- Use the `parent` property for child resources — not `/` in the name.
+
+Recommended Bicep project layout:
+
+```
+infra/
+├── env/
+│   ├── dev/
+│   │   ├── main.bicep
+│   │   └── main.dev.bicepparam
+│   └── prd/
+│       ├── main.bicep
+│       └── main.prd.bicepparam
+└── modules/
+    ├── <module1>/
+    │   └── main.bicep
+    └── <module2>/
+        └── main.bicep
+```
+
+#### Terraform Standards
+
+- Follow standard file conventions per environment: `main.tf`, `variables.tf`, `outputs.tf`, `providers.tf`, `backend.tf`, `locals.tf`, `datasource.tf` (when relevant).
+- Use `snake_case` for all variable, output, and resource names.
+- Use AzureRM provider best practices — avoid deprecated arguments, optimize for reusability and idempotency.
+- Show module usage from `env/<env>/main.tf` and define reusable modules under `modules/`.
+
+Recommended Terraform project layout:
+
+```
+infra/
+├── env/
+│   ├── dev/
+│   │   ├── backend.tf
+│   │   ├── datasource.tf
+│   │   ├── locals.tf
+│   │   ├── main.tf
+│   │   ├── providers.tf
+│   │   └── variables.tf
+│   └── prd/
+│       ├── backend.tf
+│       ├── datasource.tf
+│       ├── locals.tf
+│       ├── main.tf
+│       ├── providers.tf
+│       └── variables.tf
+└── modules/
+    ├── <module1>/
+    └── <module2>/
+```
 
 ### Web Frontend
 
