@@ -6,33 +6,46 @@ A lightweight governance repository for AI-assisted software delivery using GitH
 
 This repo defines a **delivery framework** that ensures Copilot-generated changes follow consistent engineering standards. It provides:
 
-- Mandatory engineering rules (`agents/engineering-standards.md`)
-- A strict Definition of Done checklist (`agents/dod.md`)
-- Request templates for scoped and auditable work:
-  - `agents/feature-request-template.md`
-  - `agents/change-request-template.md`
-- Global Copilot execution instructions (`copilot-instructions.md`)
+- **10 agents** — specialized Copilot personas for implementation, security, DevOps, architecture, and more
+- **6 instruction files** — auto-applied rules for security, markdown, shell scripts, and context engineering
+- **14 skills** — domain-specific knowledge packs for GitHub Actions, CodeQL, Dependabot, Azure pricing, and more
+- **4 workspace MCP servers** — Work IQ, Playwright, Sequential Thinking, and Awesome Copilot catalog
+- Mandatory engineering rules (`.github/agents/engineering-standards.md`)
+- A strict Definition of Done checklist (`.github/agents/dod.md`)
+- Global Copilot execution instructions (`.github/copilot-instructions.md`)
 
 In short: this repository is a **policy + process layer** for implementation quality, security, architecture discipline, and documentation completeness.
 
+## Prerequisites
+
+| Requirement | Required for | Check |
+|---|---|---|
+| **VS Code** with CLI on PATH | Extensions, workspace | `code --version` |
+| **GitHub Copilot** license | All agent/skill functionality | Sign in via VS Code |
+| **Node.js** (v18+) | Work IQ, Playwright, Sequential Thinking MCP servers | `node --version` |
+| **Docker Desktop** | Awesome Copilot MCP server (catalog search) | `docker --version` |
+
+> **Note:** Node.js and Docker are only needed for the MCP servers in `.vscode/mcp.json`. Agents, skills, and instructions work without them.
+
 ## MCP Servers
 
-This workspace is configured with the following MCP (Model Context Protocol) servers in `.vscode/mcp.json`:
+Workspace-level servers (`.vscode/mcp.json`) — available automatically when you open the repo:
 
-| Server | Package | Purpose |
+| Server | Transport | Purpose |
 |---|---|---|
-| **Work IQ** | `@microsoft/workiq` | Query Microsoft 365 data — emails, meetings, documents, Teams messages, and people |
-| **Playwright** | `@playwright/mcp` | Browser automation, testing, screenshots, and web interaction |
-| **Sequential Thinking** | `@modelcontextprotocol/server-sequential-thinking` | Structured reasoning for complex planning and architecture decisions |
+| **Work IQ** | `npx @microsoft/workiq` | Query Microsoft 365 data — emails, meetings, documents, Teams messages |
+| **Playwright** | `npx @playwright/mcp` | Browser automation, testing, screenshots, and web interaction |
+| **Sequential Thinking** | `npx @modelcontextprotocol/server-sequential-thinking` | Structured reasoning for complex planning and architecture decisions |
+| **Awesome Copilot** | `docker` (stdio) | Runtime search/load of the [awesome-copilot](https://awesome-copilot.github.com/) community catalog |
 
-Additionally, the following MCP servers are configured at user/profile level:
+User-level servers (registered by the setup script or manually) — shared across all workspaces:
 
 | Server | Purpose |
 |---|---|
-| **Azure** | Azure resource management, deployment, diagnostics, and best practices |
-| **Bicep** | Bicep file authoring, validation, and ARM template decompilation |
 | **GitHub** | GitHub operations — issues, PRs, repos, branches, files, releases, search |
 | **Microsoft Docs** | Microsoft Learn documentation search, code sample search, and page fetch |
+| **Azure** | Azure resource management, deployment, diagnostics, and best practices |
+| **Bicep** | Bicep file authoring, validation, and ARM template decompilation |
 | **PostgreSQL** | PostgreSQL database querying, schema exploration, and dashboards |
 | **Pylance** | Python language features — docs, imports, refactoring, syntax errors |
 | **Foundry** | Microsoft Foundry agent management — deploy, evaluate, optimize prompts |
@@ -42,15 +55,44 @@ Additionally, the following MCP servers are configured at user/profile level:
 ```text
 .
 ├── .github/
-│   ├── copilot-instructions.md          # Orchestration — references agents, defines workflow
-│   └── agents/
-│       ├── engineering-standards.md      # Architecture, security, infra, AI/ML standards
-│       ├── dod.md                        # Definition of Done checklist
-│       ├── feature-request-template.md   # New feature implementation template
-│       └── change-request-template.md    # Bug fix / refactor / modification template
+│   ├── copilot-instructions.md          # Orchestration — agents, skills, workflow rules
+│   ├── agents/
+│   │   ├── engineering-standards.md      # Architecture, security, infra, AI/ML standards
+│   │   ├── dod.md                        # Definition of Done checklist
+│   │   ├── implementation-template.md    # New feature / bug fix / refactor template
+│   │   ├── marketing.md                  # Monetization modeling agent
+│   │   ├── ux.md                         # UI/UX design agent
+│   │   ├── github-actions-expert.agent.md
+│   │   ├── se-security-reviewer.agent.md
+│   │   ├── adr-generator.agent.md
+│   │   ├── devops-expert.agent.md
+│   │   └── repo-architect.agent.md
+│   ├── instructions/
+│   │   ├── agent-safety.instructions.md
+│   │   ├── agents.instructions.md
+│   │   ├── context-engineering.instructions.md
+│   │   ├── markdown-gfm.instructions.md
+│   │   ├── security-and-owasp.instructions.md
+│   │   └── shell.instructions.md
+│   └── skills/
+│       ├── architecture-blueprint-generator/
+│       ├── apple-appstore-reviewer/
+│       ├── az-cost-optimize/
+│       ├── azure-pricing/
+│       ├── azure-resource-visualizer/
+│       ├── cloud-design-patterns/
+│       ├── codeql/
+│       ├── create-implementation-plan/
+│       ├── creating-oracle-to-postgres-master-migration-plan/
+│       ├── dependabot/
+│       ├── git-commit/
+│       ├── github-issues/
+│       ├── gtm-0-to-1-launch/
+│       └── secret-scanning/
 ├── .vscode/
 │   ├── extensions.json                  # Recommended VS Code extensions
 │   └── mcp.json                         # Workspace MCP server configuration
+├── azure.md                             # Azure tenant/subscription context (edit after fork)
 └── scripts/
     ├── init-setup.ps1                   # Windows setup script
     └── init-setup.sh                    # macOS/Linux setup script
@@ -60,17 +102,52 @@ Additionally, the following MCP servers are configured at user/profile level:
 
 | Agent | Invoke with | Purpose |
 |---|---|---|
+| **Implementation Template** | `@implementation-template` | Implementing a new feature, fixing a bug, refactoring, or modifying existing behavior |
 | **Engineering Standards** | `@engineering-standards` | Review architecture, security, infrastructure, and coding compliance |
 | **Definition of Done** | `@dod` | Validate task completion before marking done |
-| **Feature Request** | `@feature-request-template` | Structured template for implementing new features |
-| **Change Request** | `@change-request-template` | Structured template for bug fixes, refactors, and modifications |
+| **UX** | `@ux` | UI/frontend work — opinionated design patterns, component selection, layout |
+| **Marketing** | `@marketing` | Monetization modeling — cost structure and revenue projections |
+| **GitHub Actions Expert** | `@github-actions-expert` | CI/CD workflows, action pinning, OIDC auth, supply-chain security |
+| **Security Reviewer** | `@se-security-reviewer` | OWASP Top 10, Zero Trust, LLM security, enterprise security review |
+| **ADR Generator** | `@adr-generator` | Architectural Decision Records with structured formatting |
+| **DevOps Expert** | `@devops-expert` | DevOps infinity loop — Plan, Code, Build, Test, Release, Deploy, Operate, Monitor |
+| **Repo Architect** | `@repo-architect` | Validate/scaffold agentic project structures and Copilot customization files |
+
+## Skills
+
+Skills are auto-loaded from `.github/skills/` and triggered by matching prompts:
+
+| Skill | Trigger |
+|---|---|
+| `create-implementation-plan` | Planning a new feature, refactor, package upgrade, or design change |
+| `git-commit` | Committing changes — conventional commits, intelligent staging, auto-generated messages |
+| `github-issues` | Creating, updating, or managing GitHub issues (bug reports, features, labels, milestones) |
+| `architecture-blueprint-generator` | Generating architecture documentation, detecting patterns, creating visual diagrams |
+| `codeql` | Setting up CodeQL code scanning, GitHub Actions workflows for SAST, or CodeQL CLI |
+| `dependabot` | Configuring `dependabot.yml`, dependency update strategies, grouped updates |
+| `secret-scanning` | Enabling secret scanning, push protection, custom patterns, or remediating alerts |
+| `cloud-design-patterns` | Designing distributed systems — reliability, messaging, performance, security patterns |
+| `azure-pricing` | Estimating Azure costs, comparing SKUs, fetching real-time pricing data |
+| `az-cost-optimize` | Auditing Azure resources for cost savings, analyzing IaC files for optimization |
+| `azure-resource-visualizer` | Generating Mermaid diagrams of Azure resource groups and their relationships |
+| `apple-appstore-reviewer` | Reviewing code for App Store compliance, optimization, or common rejection reasons |
+| `gtm-0-to-1-launch` | Go-to-market planning, finding early adopters, building launch playbooks |
+| `creating-oracle-to-postgres-master-migration-plan` | Assessing .NET projects for Oracle-to-PostgreSQL migration |
+
+## Instructions
+
+Instruction files in `.github/instructions/` are auto-applied based on `applyTo` glob patterns:
+
+| Instruction | Applies to | Purpose |
+|---|---|---|
+| `agent-safety` | All files | Safe AI agent system guidelines — governance, tool access, audit |
+| `agents` | `*.agent.md` files | Meta-instructions for creating custom agent files |
+| `context-engineering` | All files | Structuring code for maximum Copilot effectiveness |
+| `markdown-gfm` | `*.md` files | GitHub-flavored markdown formatting rules |
+| `security-and-owasp` | All files | OWASP Top 10 secure coding practices |
+| `shell` | `*.sh` files | Shell scripting best practices and conventions |
 
 ## Getting Started (New Machine / Fresh Clone)
-
-### Prerequisites
-
-- **VS Code** with the CLI on PATH (`code` command)
-- **GitHub Copilot** license
 
 ### Automated Setup
 
@@ -88,9 +165,10 @@ chmod +x scripts/init-setup.sh
 ```
 
 The script will:
-1. Install recommended VS Code extensions (Copilot, Azure, Bicep, Pylance, PostgreSQL, Foundry)
-2. Register user-level MCP servers (GitHub MCP, Microsoft Docs MCP) if not already configured
-3. Validate the workspace config files exist
+1. Check prerequisites (VS Code, Node.js, Docker)
+2. Install recommended VS Code extensions (Copilot, Azure, Bicep, Pylance, PostgreSQL, Foundry)
+3. Register user-level MCP servers (GitHub MCP, Microsoft Docs MCP) if not already configured
+4. Validate the workspace config files exist
 
 Use `--skip-extensions` or `--skip-mcp` to skip individual steps.
 
@@ -101,13 +179,22 @@ Use `--skip-extensions` or `--skip-mcp` to skip individual steps.
    - **GitHub MCP** — `https://api.githubcopilot.com/mcp/`
    - **Microsoft Docs MCP** — `https://learn.microsoft.com/api/mcp`
 
+### After Setup
+
+1. **Edit `azure.md`** — fill in your Azure tenant ID, subscription, and resource group (or leave blank if not using Azure)
+2. (Optional) Sign in to Azure CLI: `az login`
+3. (Optional) Start Docker Desktop for the Awesome Copilot MCP server
+4. Start chatting — try `@implementation-template`, `@dod`, `@se-security-reviewer`
+
 ## How to use it
 
-1. Use `@feature-request-template` or `@change-request-template` to scope work.
+1. Use `@implementation-template` to scope new features, bug fixes, or refactors.
 2. Copilot will follow the mandatory workflow from `copilot-instructions.md`.
 3. Implementation only begins after impact, security, architecture, and infrastructure analysis.
 4. Use `@dod` to validate completion before marking work done.
 5. Use `@engineering-standards` to review compliance at any point.
+6. Use `@se-security-reviewer` for security-focused code review.
+7. Use `@github-actions-expert` when building CI/CD pipelines.
 
 ## Core principles enforced
 
@@ -122,13 +209,3 @@ Use `--skip-extensions` or `--skip-mcp` to skip individual steps.
 - Teams using Copilot for implementation tasks
 - Engineers who need consistent review gates
 - Tech leads enforcing architecture and security standards
-
-## Status
-
-Initial baseline documentation and governance templates are in place.
-
-
-## Usage
-Create new feature with feature request template
-Change request with change request template
-Copilot-instructions.md should be under .github directory

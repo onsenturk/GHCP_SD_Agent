@@ -28,6 +28,34 @@ These rules are non-negotiable. If a request conflicts with these standards:
 | `@ux` | Implementing any UI/frontend work — applies opinionated design patterns, component selection, and layout decisions automatically |
 | `@marketing` | Monetization modeling — run on-demand to analyze cost structure and generate conservative revenue projections to `marketing.md` |
 | `@dod` | Validating completion of any task before marking done |
+| `@github-actions-expert` | Writing or reviewing GitHub Actions workflows, action pinning, OIDC auth, or CI/CD security |
+| `@se-security-reviewer` | Security-focused code review — OWASP Top 10, Zero Trust, LLM security, enterprise standards |
+| `@adr-generator` | Creating Architectural Decision Records (ADRs) with structured formatting |
+| `@devops-expert` | DevOps practices following the infinity loop (Plan → Code → Build → Test → Release → Deploy → Operate → Monitor) |
+| `@repo-architect` | Bootstrapping or validating agentic project structures, folder hierarchies, and Copilot customization files |
+
+---
+
+## When to Use Skills
+
+Skills are loaded automatically from `.github/skills/`. Use the matching skill when the task falls within its domain:
+
+| Skill | Trigger |
+|---|---|
+| `create-implementation-plan` | Planning a new feature, refactor, package upgrade, or design change |
+| `git-commit` | Committing changes — uses conventional commits, intelligent staging, auto-generated messages |
+| `github-issues` | Creating, updating, or managing GitHub issues (bug reports, features, labels, milestones) |
+| `architecture-blueprint-generator` | Generating architecture documentation, detecting patterns, creating visual diagrams |
+| `codeql` | Setting up CodeQL code scanning, GitHub Actions workflows for SAST, or CodeQL CLI |
+| `dependabot` | Configuring `dependabot.yml`, dependency update strategies, grouped updates, or security updates |
+| `secret-scanning` | Enabling secret scanning, push protection, custom patterns, or remediating secret alerts |
+| `cloud-design-patterns` | Designing distributed systems — reliability, messaging, performance, security patterns |
+| `azure-pricing` | Estimating Azure costs, comparing SKUs, fetching real-time pricing data |
+| `az-cost-optimize` | Auditing Azure resources for cost savings, analyzing IaC files for optimization |
+| `azure-resource-visualizer` | Generating Mermaid diagrams of Azure resource groups and their relationships |
+| `apple-appstore-reviewer` | Reviewing code for App Store compliance, optimization, or common rejection reasons |
+| `gtm-0-to-1-launch` | Go-to-market planning, finding early adopters, building launch playbooks |
+| `creating-oracle-to-postgres-master-migration-plan` | Assessing .NET projects for Oracle-to-PostgreSQL migration |
 
 ---
 

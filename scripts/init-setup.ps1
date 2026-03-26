@@ -33,6 +33,14 @@ Write-Step "Checking prerequisites"
 $code = Get-Command code -ErrorAction SilentlyContinue
 if ($code) { Write-Ok "VS Code CLI available" } else { Write-Warn "VS Code CLI (code) not on PATH — extension install will be skipped." }
 
+# Node.js (required for npx-based MCP servers)
+$node = Get-Command node -ErrorAction SilentlyContinue
+if ($node) { Write-Ok "Node.js available ($(& node --version))" } else { Write-Warn "Node.js not found — MCP servers (workiq, playwright, sequential-thinking) require Node.js 18+." }
+
+# Docker (required for awesome-copilot MCP server)
+$docker = Get-Command docker -ErrorAction SilentlyContinue
+if ($docker) { Write-Ok "Docker available" } else { Write-Warn "Docker not found — the awesome-copilot MCP server requires Docker Desktop." }
+
 # ─── VS Code Extensions ─────────────────────────────────────────────────────
 
 $extensions = @(
@@ -128,7 +136,7 @@ Write-Step "Validating workspace configuration"
 
 $workspaceMcp = Join-Path $PSScriptRoot "..\.vscode\mcp.json"
 if (Test-Path $workspaceMcp) {
-    Write-Ok ".vscode/mcp.json exists (workiq, playwright, sequential-thinking)"
+    Write-Ok ".vscode/mcp.json exists (workiq, playwright, sequential-thinking, awesome-copilot)"
 } else {
     Write-Warn ".vscode/mcp.json not found — workspace MCP servers will not be available"
 }
@@ -152,5 +160,6 @@ Write-Host "  1. Open this folder in VS Code" -ForegroundColor Gray
 Write-Host "  2. Accept the recommended extensions prompt (or run: code --install-extension from list)" -ForegroundColor Gray
 Write-Host "  3. Sign in to GitHub Copilot" -ForegroundColor Gray
 Write-Host "  4. (Optional) Sign in to Azure CLI: az login" -ForegroundColor Gray
-Write-Host "  5. Start chatting — use @implementation-template, @dod, @engineering-standards" -ForegroundColor Gray
+Write-Host "  5. (Optional) Start Docker Desktop for the awesome-copilot MCP server" -ForegroundColor Gray
+Write-Host "  6. Start chatting — use @implementation-template, @dod, @se-security-reviewer, @github-actions-expert" -ForegroundColor Gray
 Write-Host ""

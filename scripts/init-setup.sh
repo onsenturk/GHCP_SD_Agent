@@ -39,6 +39,20 @@ else
   warn "VS Code CLI (code) not on PATH — extension install will be skipped."
 fi
 
+# Node.js (required for npx-based MCP servers)
+if command -v node &>/dev/null; then
+  ok "Node.js available ($(node --version))"
+else
+  warn "Node.js not found — MCP servers (workiq, playwright, sequential-thinking) require Node.js 18+."
+fi
+
+# Docker (required for awesome-copilot MCP server)
+if command -v docker &>/dev/null; then
+  ok "Docker available"
+else
+  warn "Docker not found — the awesome-copilot MCP server requires Docker Desktop."
+fi
+
 # ─── VS Code Extensions ─────────────────────────────────────────────────────
 
 EXTENSIONS=(
@@ -161,7 +175,7 @@ fi
 step "Validating workspace configuration"
 
 if [[ -f "$REPO_DIR/.vscode/mcp.json" ]]; then
-  ok ".vscode/mcp.json exists (workiq, playwright, sequential-thinking)"
+  ok ".vscode/mcp.json exists (workiq, playwright, sequential-thinking, awesome-copilot)"
 else
   warn ".vscode/mcp.json not found — workspace MCP servers will not be available"
 fi
@@ -182,5 +196,6 @@ echo "  1. Open this folder in VS Code"
 echo "  2. Accept the recommended extensions prompt"
 echo "  3. Sign in to GitHub Copilot"
 echo "  4. (Optional) Sign in to Azure CLI: az login"
-echo "  5. Start chatting — use @implementation-template, @dod, @engineering-standards"
+echo "  5. (Optional) Start Docker Desktop for the awesome-copilot MCP server"
+echo "  6. Start chatting — use @implementation-template, @dod, @se-security-reviewer, @github-actions-expert"
 echo ""
