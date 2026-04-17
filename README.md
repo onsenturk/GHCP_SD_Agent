@@ -133,6 +133,33 @@ Skills are auto-loaded from `.github/skills/` and triggered by matching prompts:
 | `apple-appstore-reviewer` | Reviewing code for App Store compliance, optimization, or common rejection reasons |
 | `gtm-0-to-1-launch` | Go-to-market planning, finding early adopters, building launch playbooks |
 | `creating-oracle-to-postgres-master-migration-plan` | Assessing .NET projects for Oracle-to-PostgreSQL migration |
+| `foundry-agent-sync` | Creating, syncing, deploying, or updating AI agents in Azure AI Foundry |
+
+### Keeping skills in sync with upstream
+
+Local skill folders are copies from [`github/awesome-copilot`](https://github.com/github/awesome-copilot)
+under `skills/<name>/`. Each folder has a `SOURCE.md` that records the upstream commit SHA it was
+last synced from.
+
+Use [scripts/sync-skills.ps1](scripts/sync-skills.ps1) to manage them:
+
+```powershell
+# Sync every local skill to the latest upstream commit
+pwsh ./scripts/sync-skills.ps1
+
+# Sync a single skill
+pwsh ./scripts/sync-skills.ps1 -SkillName codeql
+
+# CI-friendly drift detection (exits non-zero if any skill is out of date)
+pwsh ./scripts/sync-skills.ps1 -Check
+
+# Force re-download even if SOURCE.md says the skill is current
+pwsh ./scripts/sync-skills.ps1 -Force
+```
+
+Set `$env:GITHUB_TOKEN` before running to avoid the unauthenticated GitHub API rate limit.
+The script never adds new skills — to onboard a new one, create an empty folder under
+`.github/skills/<name>/` and then run the sync.
 
 ## Instructions
 
