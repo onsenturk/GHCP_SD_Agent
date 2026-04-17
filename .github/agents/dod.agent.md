@@ -1,5 +1,9 @@
 ---
-description: "Validates completion of any task. Run this checklist before marking work as done."
+name: 'dod'
+description: 'Validates completion of any task. Run this checklist before marking work as done.'
+tools: ['codebase', 'search', 'problems']
+model: 'Claude Haiku 4'
+target: 'vscode'
 ---
 
 # Definition of Done (DoD)
@@ -10,7 +14,7 @@ A feature, fix, or change is NOT complete unless ALL of the following are satisf
 
 ## 1. Engineering Standards Compliance
 
-- Implementation complies with agents/engineering-standards.md.
+- Implementation complies with .github/agents/engineering-standards.agent.md.
 - No architectural violations introduced.
 - No cross-layer imports.
 - No business logic inside controllers.

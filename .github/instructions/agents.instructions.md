@@ -53,7 +53,35 @@ target: 'vscode'
 - Specifies which AI model the agent should use
 - Supported in VS Code, JetBrains IDEs, Eclipse, and Xcode
 - Example: `'Claude Sonnet 4.5'`, `'gpt-4'`, `'gpt-4o'`
-- Choose based on agent complexity and required capabilities
+- Choose based on agent complexity and required capabilities — see **Model Tiering** below
+
+### Model Tiering
+
+Pick the cheapest model that reliably does the job. Use this tiering convention across agents in this repository:
+
+| Tier | Model | Use for |
+|---|---|---|
+| **Reasoning** | `GPT-5` | Security review, complex architectural decisions, financial/cost modeling, threat analysis, non-trivial refactors |
+| **Default** | `Claude Sonnet 4.5` | Most implementation, advisory, and code-generation agents — the correct choice unless there's a reason to deviate |
+| **Fast** | `GPT-5 mini` or `Claude Haiku 4` | Structured checklists, validators, formatters, deterministic transforms, lookups |
+
+**Rules of thumb:**
+
+- Start at **Default**. Only move up to **Reasoning** if the agent has repeatedly produced weak output on the task — document why in the agent file.
+- Move down to **Fast** when the agent's job is rule-based or checklist-driven rather than judgment-driven.
+- Model availability in VS Code Copilot depends on the user's plan. Frontmatter is a *preference*, not a guarantee — VS Code falls back to the default model if the requested one is unavailable.
+- Premium-tier models (`GPT-5`, `Claude Sonnet 4.5`) consume more Copilot premium requests. Reserve them for agents that genuinely need deep reasoning.
+
+When deviating from Default, add a one-line comment above the frontmatter explaining the choice, e.g.:
+
+```yaml
+---
+# Model: GPT-5 — security review requires strongest available reasoning for vuln analysis.
+name: 'SE: Security'
+model: 'GPT-5'
+# ...
+---
+```
 
 #### **target** (OPTIONAL)
 - Specifies target environment: `'vscode'` or `'github-copilot'`

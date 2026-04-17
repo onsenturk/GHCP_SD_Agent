@@ -1,5 +1,9 @@
 ---
-description: "Reviews architecture, security, infrastructure, and coding compliance. Use to validate designs or check standards."
+name: 'engineering-standards'
+description: 'Reviews architecture, security, infrastructure, and coding compliance. Use to validate designs or check standards.'
+tools: ['codebase', 'search', 'problems', 'editFiles']
+model: 'Claude Sonnet 4.5'
+target: 'vscode'
 ---
 
 # Engineering Standards

@@ -24,7 +24,7 @@
 			"command": "npx",
 			"args": [
 				"-y",
-				"@modelcontextprotocol/server-sequential-thinking"
+				"@modelcontextprotocol/server-sequential-thinking@latest"
 			],
 			"type": "stdio"
 		},
@@ -34,12 +34,27 @@
 				"run",
 				"-i",
 				"--rm",
+				"--pull=always",
 				"ghcr.io/microsoft/mcp-dotnet-samples/awesome-copilot:latest"
 			],
 			"type": "stdio"
 		},
 		"microsoftdocs": {
 			"url": "https://learn.microsoft.com/api/mcp",
+			"type": "http"
+		},
+		"azure": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@azure/mcp@latest",
+				"server",
+				"start"
+			],
+			"type": "stdio"
+		},
+		"github": {
+			"url": "https://api.githubcopilot.com/mcp/",
 			"type": "http"
 		}
 	},

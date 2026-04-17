@@ -1,5 +1,9 @@
 ---
-description: "Template for all implementation work — new features, bug fixes, refactors, performance improvements, or breaking changes."
+name: 'implementation-template'
+description: 'Template for all implementation work — new features, bug fixes, refactors, performance improvements, or breaking changes.'
+tools: ['codebase', 'search', 'editFiles', 'runCommands', 'problems']
+model: 'Claude Sonnet 4.5'
+target: 'vscode'
 ---
 
 # Implementation Request
@@ -59,8 +63,8 @@ Define testable conditions that confirm the work is correct.
 
 ## 5. Constraints
 
-- Must comply with agents/engineering-standards.md
-- Must satisfy agents/dod.md
+- Must comply with .github/agents/engineering-standards.agent.md
+- Must satisfy .github/agents/dod.agent.md
 - Must not refactor unrelated code
 - Must not expand scope beyond defined requirements
 - Must not create, update, or delete Azure resources without explicit user approval
@@ -137,7 +141,7 @@ Do not modify unrelated files.
 
 After implementation, explicitly:
 
-1. Validate against agents/dod.md checklist.
+1. Validate against .github/agents/dod.agent.md checklist.
 2. Confirm no regression introduced.
 3. Confirm documentation updates.
 4. Confirm security review completion.

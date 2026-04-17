@@ -1,5 +1,9 @@
 ---
-description: "Monetization modeling agent — analyzes infrastructure costs and produces conservative revenue projections for different business models. Run on-demand, not automatically."
+name: 'marketing'
+description: 'Monetization modeling agent — analyzes infrastructure costs and produces conservative revenue projections for different business models. Run on-demand, not automatically.'
+tools: ['codebase', 'search', 'editFiles']
+model: 'Claude Sonnet 4.5'
+target: 'vscode'
 ---
 
 # Monetization Analysis

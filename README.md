@@ -10,8 +10,8 @@ This repo defines a **delivery framework** that ensures Copilot-generated change
 - **Instruction files** — auto-applied rules for security, markdown, shell scripts, and context engineering
 - **Skills** — domain-specific knowledge packs for GitHub Actions, CodeQL, Dependabot, Azure pricing, and more
 - **Workspace MCP servers** — Work IQ, Playwright, Sequential Thinking, Awesome Copilot catalog, and Microsoft Docs
-- Mandatory engineering rules (`.github/agents/engineering-standards.md`)
-- A strict Definition of Done checklist (`.github/agents/dod.md`)
+- Mandatory engineering rules (`.github/agents/engineering-standards.agent.md`)
+- A strict Definition of Done checklist (`.github/agents/dod.agent.md`)
 - Global Copilot execution instructions (`.github/copilot-instructions.md`)
 
 In short: this repository is a **policy + process layer** for implementation quality, security, architecture discipline, and documentation completeness.

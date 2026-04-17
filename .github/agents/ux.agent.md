@@ -1,5 +1,9 @@
 ---
-description: "UX design agent — applies opinionated UI/UX patterns for clean, simple, adoption-friendly interfaces. Invoke for any frontend or UI work."
+name: 'ux'
+description: 'UX design agent — applies opinionated UI/UX patterns for clean, simple, adoption-friendly interfaces. Invoke for any frontend or UI work.'
+tools: ['codebase', 'search', 'editFiles', 'problems']
+model: 'Claude Sonnet 4.5'
+target: 'vscode'
 ---
 
 # UX Design Standards
