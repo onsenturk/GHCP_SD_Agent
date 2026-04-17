@@ -57,26 +57,28 @@ User-level servers (registered by the setup script or manually) — shared acros
 ├── .github/
 │   ├── copilot-instructions.md          # Orchestration — agents, skills, workflow rules
 │   ├── agents/
-│   │   ├── engineering-standards.md      # Architecture, security, infra, AI/ML standards
-│   │   ├── dod.md                        # Definition of Done checklist
-│   │   ├── implementation-template.md    # New feature / bug fix / refactor template
-│   │   ├── marketing.md                  # Monetization modeling agent
-│   │   ├── ux.md                         # UI/UX design agent
-│   │   ├── github-actions-expert.agent.md
-│   │   ├── se-security-reviewer.agent.md
 │   │   ├── adr-generator.agent.md
 │   │   ├── devops-expert.agent.md
-│   │   └── repo-architect.agent.md
+│   │   ├── dod.agent.md                  # Definition of Done checklist
+│   │   ├── engineering-standards.agent.md # Architecture, security, infra, AI/ML standards
+│   │   ├── github-actions-expert.agent.md
+│   │   ├── implementation-template.agent.md # New feature / bug fix / refactor template
+│   │   ├── marketing.agent.md            # Monetization modeling agent
+│   │   ├── repo-architect.agent.md
+│   │   ├── se-security-reviewer.agent.md
+│   │   └── ux.agent.md                   # UI/UX design agent
 │   ├── instructions/
 │   │   ├── agent-safety.instructions.md
 │   │   ├── agents.instructions.md
+│   │   ├── bicep.instructions.md
 │   │   ├── context-engineering.instructions.md
 │   │   ├── markdown-gfm.instructions.md
+│   │   ├── powershell.instructions.md
 │   │   ├── security-and-owasp.instructions.md
 │   │   └── shell.instructions.md
-│   └── skills/
-│       ├── architecture-blueprint-generator/
+│   └── skills/                           # Each skill has SKILL.md + SOURCE.md (upstream SHA)
 │       ├── apple-appstore-reviewer/
+│       ├── architecture-blueprint-generator/
 │       ├── az-cost-optimize/
 │       ├── azure-pricing/
 │       ├── azure-resource-visualizer/
@@ -85,6 +87,7 @@ User-level servers (registered by the setup script or manually) — shared acros
 │       ├── create-implementation-plan/
 │       ├── creating-oracle-to-postgres-master-migration-plan/
 │       ├── dependabot/
+│       ├── foundry-agent-sync/
 │       ├── git-commit/
 │       ├── github-issues/
 │       ├── gtm-0-to-1-launch/
@@ -95,7 +98,9 @@ User-level servers (registered by the setup script or manually) — shared acros
 ├── azure.md                             # Azure tenant/subscription context (edit after fork)
 └── scripts/
     ├── init-setup.ps1                   # Windows setup script
-    └── init-setup.sh                    # macOS/Linux setup script
+    ├── init-setup.sh                    # macOS/Linux setup script
+    ├── install-global.ps1               # Install user-level MCP servers
+    └── sync-skills.ps1                  # Sync skills from github/awesome-copilot
 ```
 
 ## Agents
