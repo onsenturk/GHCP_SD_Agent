@@ -6,7 +6,16 @@
 .DESCRIPTION
     Downloads the entire contents of the .github/ and .vscode/ folders from the
     copilot-agent-toolkit repository on GitHub and writes them into the current
-    working directory, overwriting any existing files.
+    working directory, overwriting any existing files WITHIN THOSE TWO FOLDERS
+    ONLY.
+
+    Safety guarantees:
+      * The script never deletes any file. It only writes files that exist in
+        the upstream toolkit's .github/ and .vscode/ trees.
+      * Any local file whose path is NOT present in the upstream tree (for
+        example .github/workflows/*.yml) is left completely untouched.
+      * Each download target is validated to live inside one of the allowed
+        top-level folders; path-traversal attempts are refused.
 
     Records the commit SHA that was pulled in .github/.toolkit-version so you
     can tell at a glance how fresh your local copy is. There is no drift
@@ -111,8 +120,26 @@ foreach ($folder in $script:Folders) {
     }
 
     foreach ($file in $files) {
+        # --- safety: only allow writes inside one of the configured folders ---
+        $relPath = $file.Path -replace '\\', '/'
+        $allowed = $false
+        foreach ($f in $script:Folders) {
+            if ($relPath -eq $f -or $relPath.StartsWith("$f/")) { $allowed = $true; break }
+        }
+        if (-not $allowed) {
+            Write-Warning "  [skip] $relPath : outside allowed folders ($($script:Folders -join ', '))"
+            continue
+        }
+
         $targetPath = Join-Path $Path $file.Path
-        $targetDir  = Split-Path -Parent $targetPath
+        $resolvedRoot = [System.IO.Path]::GetFullPath((Join-Path $Path '.'))
+        $resolvedTarget = [System.IO.Path]::GetFullPath($targetPath)
+        if (-not $resolvedTarget.StartsWith($resolvedRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+            Write-Warning "  [skip] $relPath : path escapes target directory"
+            continue
+        }
+
+        $targetDir = Split-Path -Parent $targetPath
 
         if ($DryRun) {
             Write-Host "  [dry-run] $($file.Path)" -ForegroundColor Magenta

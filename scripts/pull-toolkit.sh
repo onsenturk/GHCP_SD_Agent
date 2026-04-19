@@ -3,6 +3,14 @@
 # pull-toolkit.sh — Pulls .github/ and .vscode/ from copilot-agent-toolkit
 # into the current repository.
 #
+# Safety guarantees:
+#   * Never deletes any local file. Only writes files that exist in the
+#     upstream toolkit's .github/ and .vscode/ trees.
+#   * Local files whose path is not present upstream (e.g. .github/workflows/*.yml)
+#     are left completely untouched.
+#   * Each download target is validated to live inside one of the allowed
+#     top-level folders; path-traversal attempts are refused.
+#
 # Usage:
 #   ./scripts/pull-toolkit.sh [--ref <branch|tag|sha>] [--path <dir>] [--dry-run]
 #
@@ -94,6 +102,24 @@ for folder in "${FOLDERS[@]}"; do
   echo "=== ${folder} ==="
   while IFS= read -r filepath; do
     [[ -z "$filepath" ]] && continue
+
+    # --- safety: only allow writes inside one of the configured folders ---
+    allowed=false
+    for f in "${FOLDERS[@]}"; do
+      if [[ "$filepath" == "$f" || "$filepath" == "$f/"* ]]; then
+        allowed=true; break
+      fi
+    done
+    if ! $allowed; then
+      echo "  [skip] ${filepath} : outside allowed folders" >&2
+      continue
+    fi
+    # refuse path traversal
+    if [[ "$filepath" == *".."* ]]; then
+      echo "  [skip] ${filepath} : path traversal refused" >&2
+      continue
+    fi
+
     target="${TARGET_PATH}/${filepath}"
 
     if $DRY_RUN; then
