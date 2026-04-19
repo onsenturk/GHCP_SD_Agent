@@ -29,26 +29,21 @@ In short: this repository is a **policy + process layer** for implementation qua
 
 ## MCP Servers
 
-Workspace-level servers (`.vscode/mcp.json`) — available automatically when you open the repo:
+All MCP servers are configured at the workspace level in [.vscode/mcp.json](.vscode/mcp.json) and are
+available automatically when you open the repo:
 
 | Server | Transport | Purpose |
 |---|---|---|
-| **Work IQ** | `npx @microsoft/workiq` | Query Microsoft 365 data — emails, meetings, documents, Teams messages |
-| **Playwright** | `npx @playwright/mcp` | Browser automation, testing, screenshots, and web interaction |
-| **Sequential Thinking** | `npx @modelcontextprotocol/server-sequential-thinking` | Structured reasoning for complex planning and architecture decisions |
-| **Awesome Copilot** | `docker` (stdio) | Runtime search/load of the [awesome-copilot](https://awesome-copilot.github.com/) community catalog |
+| **Work IQ** | `npx @microsoft/workiq` (stdio) | Query Microsoft 365 data — emails, meetings, documents, Teams messages |
+| **Playwright** | `npx @playwright/mcp` (stdio) | Browser automation, testing, screenshots, and web interaction |
+| **Sequential Thinking** | `npx @modelcontextprotocol/server-sequential-thinking` (stdio) | Structured reasoning for complex planning and architecture decisions |
+| **Awesome Copilot** | `docker` (stdio) | Runtime search/load of the [awesome-copilot](https://github.com/github/awesome-copilot) community catalog |
 | **Microsoft Docs** | `https://learn.microsoft.com/api/mcp` (http) | Microsoft Learn documentation search, code sample search, and page fetch |
+| **Azure** | `npx @azure/mcp` (stdio) | Azure resource management, deployment, diagnostics, and best practices |
+| **GitHub** | `https://api.githubcopilot.com/mcp/` (http) | GitHub operations — issues, PRs, repos, branches, files, releases, search |
 
-User-level servers (registered by the setup script or manually) — shared across all workspaces:
-
-| Server | Purpose |
-|---|---|
-| **GitHub** | GitHub operations — issues, PRs, repos, branches, files, releases, search |
-| **Azure** | Azure resource management, deployment, diagnostics, and best practices |
-| **Bicep** | Bicep file authoring, validation, and ARM template decompilation |
-| **PostgreSQL** | PostgreSQL database querying, schema exploration, and dashboards |
-| **Pylance** | Python language features — docs, imports, refactoring, syntax errors |
-| **Foundry** | Microsoft Foundry agent management — deploy, evaluate, optimize prompts |
+> Recommended VS Code extensions (Bicep, Pylance, PostgreSQL, Foundry) ship language features and tool
+> integrations — they are not MCP servers. See [.vscode/extensions.json](.vscode/extensions.json).
 
 ## Repository structure
 
@@ -174,8 +169,10 @@ Instruction files in `.github/instructions/` are auto-applied based on `applyTo`
 |---|---|---|
 | `agent-safety` | All files | Safe AI agent system guidelines — governance, tool access, audit |
 | `agents` | `*.agent.md` files | Meta-instructions for creating custom agent files |
+| `bicep` | `*.bicep`, `*.bicepparam` files | Bicep authoring standards, including Azure Verified Modules (AVM) usage |
 | `context-engineering` | All files | Structuring code for maximum Copilot effectiveness |
 | `markdown-gfm` | `*.md` files | GitHub-flavored markdown formatting rules |
+| `powershell` | `*.ps1`, `*.psm1`, `*.psd1` files | PowerShell scripting best practices |
 | `security-and-owasp` | All files | OWASP Top 10 secure coding practices |
 | `shell` | `*.sh` files | Shell scripting best practices and conventions |
 
@@ -199,17 +196,14 @@ chmod +x scripts/init-setup.sh
 The script will:
 1. Check prerequisites (VS Code, Node.js, Docker)
 2. Install recommended VS Code extensions (Copilot, Azure, Bicep, Pylance, PostgreSQL, Foundry)
-3. Register user-level MCP servers (GitHub MCP, Microsoft Docs MCP) if not already configured
-4. Validate the workspace config files exist
+3. Validate that the workspace config files exist
 
-Use `--skip-extensions` or `--skip-mcp` to skip individual steps.
+Use `--skip-extensions` to skip extension installation.
 
 ### Manual Setup (if you prefer)
 
 1. Install the extensions listed in `.vscode/extensions.json` (VS Code will prompt on first open)
-2. Add these to your user-level `mcp.json` (File > Preferences > MCP Servers, or via MCP Gallery):
-   - **GitHub MCP** — `https://api.githubcopilot.com/mcp/`
-   - **Microsoft Docs MCP** — `https://learn.microsoft.com/api/mcp`
+2. Open the repo — workspace MCP servers in `.vscode/mcp.json` activate automatically
 
 ### After Setup
 

@@ -149,7 +149,7 @@ upstream_sha:  $Sha
 synced_at:     $([DateTimeOffset]::UtcNow.ToString('o'))
 synced_by:     sync-skills.ps1
 "@
-    Set-Content -LiteralPath $SourcePath -Value $content -Encoding utf8 -NoNewline
+    Set-Content -LiteralPath $SourcePath -Value $content -Encoding utf8
 }
 
 function Sync-Skill {
@@ -192,7 +192,7 @@ function Sync-Skill {
             New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
         }
         $content = Get-RawContent -Path $file.Path
-        Set-Content -LiteralPath $targetPath -Value $content -Encoding utf8 -NoNewline
+        Set-Content -LiteralPath $targetPath -Value $content -Encoding utf8
     }
 
     Write-SourceMetadata -SourcePath $sourceFile -SkillName $Name -Sha $upstreamSha

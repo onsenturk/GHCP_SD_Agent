@@ -2,18 +2,19 @@
 #
 # init-setup.sh — Initializes a fresh dev environment for copilot-agent-toolkit
 #
-# Usage: ./scripts/init-setup.sh [--skip-extensions] [--skip-mcp] [--dry-run]
+# All MCP servers are configured at the workspace level in .vscode/mcp.json
+# and activate automatically when the repo is opened in VS Code.
+#
+# Usage: ./scripts/init-setup.sh [--skip-extensions] [--dry-run]
 
 set -euo pipefail
 
 SKIP_EXTENSIONS=false
-SKIP_MCP=false
 DRY_RUN=false
 
 for arg in "$@"; do
   case "$arg" in
     --skip-extensions) SKIP_EXTENSIONS=true ;;
-    --skip-mcp)        SKIP_MCP=true ;;
     --dry-run)         DRY_RUN=true ;;
     *) echo "Unknown flag: $arg"; exit 1 ;;
   esac
@@ -88,94 +89,12 @@ else
   step "Skipping VS Code extensions (code CLI not found)"
 fi
 
-# ─── User-level MCP servers ─────────────────────────────────────────────────
-
-if [[ "$(uname)" == "Darwin" ]]; then
-  USER_MCP_PATH="$HOME/Library/Application Support/Code/User/mcp.json"
-else
-  USER_MCP_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/Code/User/mcp.json"
-fi
-
-if [[ "$SKIP_MCP" == false ]]; then
-  step "Configuring user-level MCP servers ($USER_MCP_PATH)"
-
-  # Ensure directory exists
-  mkdir -p "$(dirname "$USER_MCP_PATH")"
-
-  if [[ -f "$USER_MCP_PATH" ]]; then
-    EXISTING=$(cat "$USER_MCP_PATH")
-  else
-    EXISTING='{"servers":{},"inputs":[]}'
-  fi
-
-  # Check and add GitHub MCP if missing
-  if echo "$EXISTING" | grep -q "io.github.github/github-mcp-server"; then
-    ok "GitHub MCP (already configured)"
-  else
-    if [[ "$DRY_RUN" == true ]]; then
-      printf '   \033[35m[DRY-RUN]\033[0m Would add GitHub MCP server\n'
-    else
-      if command -v python3 &>/dev/null; then
-        EXISTING=$(echo "$EXISTING" | python3 -c "
-import sys, json
-data = json.load(sys.stdin)
-data.setdefault('servers', {})
-data['servers']['io.github.github/github-mcp-server'] = {
-    'type': 'http',
-    'url': 'https://api.githubcopilot.com/mcp/',
-    'gallery': 'https://api.mcp.github.com',
-    'version': '0.32.0'
-}
-json.dump(data, sys.stdout, indent=2)
-")
-        echo "$EXISTING" > "$USER_MCP_PATH"
-        ok "GitHub MCP added"
-      else
-        warn "python3 not found — cannot update mcp.json. Add GitHub MCP manually."
-      fi
-    fi
-  fi
-
-  # Re-read in case it was just written
-  if [[ -f "$USER_MCP_PATH" ]]; then EXISTING=$(cat "$USER_MCP_PATH"); fi
-
-  # Check and add Microsoft Docs MCP if missing
-  if echo "$EXISTING" | grep -q "microsoftdocs/mcp"; then
-    ok "Microsoft Docs MCP (already configured)"
-  else
-    if [[ "$DRY_RUN" == true ]]; then
-      printf '   \033[35m[DRY-RUN]\033[0m Would add Microsoft Docs MCP server\n'
-    else
-      if command -v python3 &>/dev/null; then
-        EXISTING=$(echo "$EXISTING" | python3 -c "
-import sys, json
-data = json.load(sys.stdin)
-data.setdefault('servers', {})
-data['servers']['microsoftdocs/mcp'] = {
-    'type': 'http',
-    'url': 'https://learn.microsoft.com/api/mcp',
-    'gallery': 'https://api.mcp.github.com',
-    'version': '1.0.0'
-}
-json.dump(data, sys.stdout, indent=2)
-")
-        echo "$EXISTING" > "$USER_MCP_PATH"
-        ok "Microsoft Docs MCP added"
-      else
-        warn "python3 not found — cannot update mcp.json. Add Microsoft Docs MCP manually."
-      fi
-    fi
-  fi
-else
-  step "Skipping MCP configuration (--skip-mcp)"
-fi
-
 # ─── Workspace validation ───────────────────────────────────────────────────
 
 step "Validating workspace configuration"
 
 if [[ -f "$REPO_DIR/.vscode/mcp.json" ]]; then
-  ok ".vscode/mcp.json exists (workiq, playwright, sequential-thinking, awesome-copilot)"
+  ok ".vscode/mcp.json exists (workiq, playwright, sequential-thinking, awesome-copilot, microsoftdocs, azure, github)"
 else
   warn ".vscode/mcp.json not found — workspace MCP servers will not be available"
 fi

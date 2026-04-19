@@ -4,8 +4,10 @@
 
 .DESCRIPTION
     - Installs recommended VS Code extensions
-    - Registers user-level MCP servers (GitHub, Microsoft Docs) if not already present
     - Validates the workspace MCP config exists
+
+    All MCP servers are configured at the workspace level in .vscode/mcp.json
+    and activate automatically when the repo is opened in VS Code.
 
 .NOTES
     Run from the repository root: .\scripts\init-setup.ps1
@@ -13,7 +15,6 @@
 
 param(
     [switch]$SkipExtensions,
-    [switch]$SkipMcp,
     [switch]$DryRun
 )
 
@@ -76,67 +77,13 @@ if (-not $SkipExtensions -and $code) {
     Write-Step "Skipping VS Code extensions (code CLI not found)"
 }
 
-# ─── User-level MCP servers ─────────────────────────────────────────────────
-
-$userMcpPath = Join-Path $env:APPDATA "Code\User\mcp.json"
-
-# The servers that should exist at user level (not workspace-portable)
-$requiredUserServers = @{
-    "io.github.github/github-mcp-server" = @{
-        type    = "http"
-        url     = "https://api.githubcopilot.com/mcp/"
-        gallery = "https://api.mcp.github.com"
-        version = "0.32.0"
-    }
-    "microsoftdocs/mcp" = @{
-        type    = "http"
-        url     = "https://learn.microsoft.com/api/mcp"
-        gallery = "https://api.mcp.github.com"
-        version = "1.0.0"
-    }
-}
-
-if (-not $SkipMcp) {
-    Write-Step "Configuring user-level MCP servers ($userMcpPath)"
-
-    if (Test-Path $userMcpPath) {
-        $userMcp = Get-Content $userMcpPath -Raw | ConvertFrom-Json -AsHashtable
-    } else {
-        $userMcp = @{ servers = @{}; inputs = @() }
-    }
-
-    if (-not $userMcp.ContainsKey("servers")) { $userMcp["servers"] = @{} }
-
-    $changed = $false
-    foreach ($name in $requiredUserServers.Keys) {
-        if ($userMcp["servers"].ContainsKey($name)) {
-            Write-Ok "$name (already configured)"
-        } else {
-            if ($DryRun) {
-                Write-Host "   [DRY-RUN] Would add $name" -ForegroundColor Magenta
-            } else {
-                $userMcp["servers"][$name] = $requiredUserServers[$name]
-                $changed = $true
-                Write-Ok "$name added"
-            }
-        }
-    }
-
-    if ($changed -and -not $DryRun) {
-        $userMcp | ConvertTo-Json -Depth 10 | Set-Content $userMcpPath -Encoding UTF8
-        Write-Ok "Saved $userMcpPath"
-    }
-} else {
-    Write-Step "Skipping MCP configuration (-SkipMcp)"
-}
-
 # ─── Workspace MCP validation ───────────────────────────────────────────────
 
 Write-Step "Validating workspace configuration"
 
 $workspaceMcp = Join-Path $PSScriptRoot "..\.vscode\mcp.json"
 if (Test-Path $workspaceMcp) {
-    Write-Ok ".vscode/mcp.json exists (workiq, playwright, sequential-thinking, awesome-copilot)"
+    Write-Ok ".vscode/mcp.json exists (workiq, playwright, sequential-thinking, awesome-copilot, microsoftdocs, azure, github)"
 } else {
     Write-Warn ".vscode/mcp.json not found — workspace MCP servers will not be available"
 }

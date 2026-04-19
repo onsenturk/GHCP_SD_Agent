@@ -26,10 +26,10 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 # ---------- paths ----------
-$repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-# Fallback: if run from scripts/ directly
+# $PSScriptRoot is the scripts/ folder; the repo root is one level up.
+$repoRoot = Split-Path -Parent $PSScriptRoot
 if (-not (Test-Path (Join-Path $repoRoot '.github'))) {
-    $repoRoot = Split-Path -Parent $PSScriptRoot
+    throw "Could not locate .github folder relative to script (expected at $repoRoot\.github)."
 }
 
 $userPromptsFolder = Join-Path $env:APPDATA 'Code\User\prompts'
@@ -40,13 +40,12 @@ $srcAgents         = Join-Path $repoRoot '.github\agents'
 $srcSkills         = Join-Path $repoRoot '.github\skills'
 
 # ---------- helpers ----------
-function Copy-ItemSafe {
+function Copy-FileSafe {
     param(
         [string]$Source,
-        [string]$Destination,
-        [switch]$Recurse
+        [string]$Destination
     )
-    $destDir = if ($Recurse) { Split-Path -Parent $Destination } else { Split-Path -Parent $Destination }
+    $destDir = Split-Path -Parent $Destination
     if (-not (Test-Path $destDir)) {
         New-Item -ItemType Directory -Path $destDir -Force | Out-Null
     }
@@ -54,12 +53,29 @@ function Copy-ItemSafe {
         Write-Warning "Skipping (exists): $Destination  — use -Force to overwrite"
         return
     }
-    if ($Recurse) {
-        Copy-Item -Path $Source -Destination $Destination -Recurse -Force
+    Copy-Item -Path $Source -Destination $Destination -Force
+    Write-Host "  Copied → $Destination"
+}
+
+function Copy-DirectorySafe {
+    param(
+        [string]$Source,
+        [string]$Destination
+    )
+    if ((Test-Path $Destination) -and -not $Force) {
+        Write-Warning "Skipping (exists): $Destination  — use -Force to overwrite"
+        return
     }
-    else {
-        Copy-Item -Path $Source -Destination $Destination -Force
+    # Remove existing target before recursive copy to avoid Copy-Item nesting
+    # the source folder INSIDE an existing destination of the same name.
+    if (Test-Path $Destination) {
+        Remove-Item -Path $Destination -Recurse -Force
     }
+    $parent = Split-Path -Parent $Destination
+    if (-not (Test-Path $parent)) {
+        New-Item -ItemType Directory -Path $parent -Force | Out-Null
+    }
+    Copy-Item -Path $Source -Destination $Destination -Recurse -Force
     Write-Host "  Copied → $Destination"
 }
 
@@ -67,7 +83,7 @@ function Copy-ItemSafe {
 Write-Host "`n=== Installing instruction files ===" -ForegroundColor Cyan
 if (Test-Path $srcInstructions) {
     foreach ($file in Get-ChildItem -Path $srcInstructions -Filter '*.instructions.md') {
-        Copy-ItemSafe -Source $file.FullName -Destination (Join-Path $userPromptsFolder $file.Name)
+        Copy-FileSafe -Source $file.FullName -Destination (Join-Path $userPromptsFolder $file.Name)
     }
 }
 else {
@@ -78,7 +94,7 @@ else {
 Write-Host "`n=== Installing agent files ===" -ForegroundColor Cyan
 if (Test-Path $srcAgents) {
     foreach ($file in Get-ChildItem -Path $srcAgents -Filter '*.agent.md') {
-        Copy-ItemSafe -Source $file.FullName -Destination (Join-Path $userPromptsFolder $file.Name)
+        Copy-FileSafe -Source $file.FullName -Destination (Join-Path $userPromptsFolder $file.Name)
     }
 }
 else {
@@ -90,7 +106,7 @@ Write-Host "`n=== Installing skill folders ===" -ForegroundColor Cyan
 if (Test-Path $srcSkills) {
     foreach ($skillDir in Get-ChildItem -Path $srcSkills -Directory) {
         $dest = Join-Path $userSkillsFolder $skillDir.Name
-        Copy-ItemSafe -Source $skillDir.FullName -Destination $dest -Recurse
+        Copy-DirectorySafe -Source $skillDir.FullName -Destination $dest
     }
 }
 else {
