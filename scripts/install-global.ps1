@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Installs GHCP_SD_Agent instructions, agents, and skills as user-level
+    Installs copilot-agent-toolkit instructions, agents, and skills as user-level
     VS Code Copilot customizations so they apply to every workspace.
 
 .DESCRIPTION

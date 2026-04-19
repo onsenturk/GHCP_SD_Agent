@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# init-setup.sh — Initializes a fresh dev environment for GHCP_SD_Agent
+# init-setup.sh — Initializes a fresh dev environment for copilot-agent-toolkit
 #
 # Usage: ./scripts/init-setup.sh [--skip-extensions] [--skip-mcp] [--dry-run]
 

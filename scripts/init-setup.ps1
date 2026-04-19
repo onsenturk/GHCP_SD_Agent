@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Initializes a fresh development environment for GHCP_SD_Agent.
+    Initializes a fresh development environment for copilot-agent-toolkit.
 
 .DESCRIPTION
     - Installs recommended VS Code extensions

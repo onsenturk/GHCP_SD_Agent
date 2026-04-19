@@ -1,4 +1,4 @@
-# GHCP_SD_Agent
+# copilot-agent-toolkit
 
 A lightweight governance repository for AI-assisted software delivery using GitHub Copilot.
 
