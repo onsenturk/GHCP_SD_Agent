@@ -239,7 +239,7 @@ Would you like to install any of these? (Provide install links)
 ```markdown
 ---
 description: '{DESCRIPTION}'
-model: GPT-4.1
+model: 'Claude Sonnet 4.5'
 tools: [{RELEVANT_TOOLS}]
 ---
 
