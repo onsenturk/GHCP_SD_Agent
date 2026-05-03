@@ -1,7 +1,7 @@
 ---
 name: 'Repo Architect Agent'
 description: 'Bootstraps and validates agentic project structures for GitHub Copilot (VS Code) and OpenCode CLI workflows. Run after `opencode /init` or VS Code Copilot initialization to scaffold proper folder hierarchies, instructions, agents, skills, and prompts.'
-tools: ['changes', 'codebase', 'editFiles', 'fetch', 'new', 'problems', 'runCommands', 'search', 'terminalLastCommand']
+tools: ['read', 'edit', 'search', 'execute', 'web']
 model: 'Claude Sonnet 4.5'
 target: 'vscode'
 ---

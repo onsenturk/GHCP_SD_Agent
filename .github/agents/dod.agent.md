@@ -1,7 +1,7 @@
 ---
 name: 'dod'
 description: 'Validates completion of any task. Run this checklist before marking work as done.'
-tools: ['codebase', 'search', 'problems']
+tools: ['read', 'search']
 model: 'Claude Haiku 4'
 target: 'vscode'
 ---
@@ -106,6 +106,9 @@ If no tests exist, add minimal coverage for new logic.
 - Dependency versions locked.
 - Vulnerability scan completed.
 - No abandoned/unmaintained libraries added.
+- **Runtimes and managed services use the latest stable or current LTS** per the Runtime & Service Versions table in `engineering-standards.agent.md` (e.g., PostgreSQL 18, Node.js 22 LTS / 24, .NET 10 LTS, Python 3.13).
+- Selected version was **verified against an authoritative source** this task (vendor release notes, Microsoft Learn, or endoflife.date) — not assumed from training data.
+- Any version below the baseline has a documented justification and remediation plan in `architecture.md`.
 
 ---
 

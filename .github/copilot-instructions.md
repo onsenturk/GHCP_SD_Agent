@@ -55,6 +55,8 @@ For questions about how a service/protocol/API works, or when generating technic
 
 5. **Prefer research over confidence.** When the user asks a factual question, default to checking the authoritative source instead of answering from memory — especially for Azure services, networking, pricing, and anything version-dependent.
 
+6. **Use latest stable / current LTS for runtimes and services.** When generating IaC, Dockerfiles, package manifests, or recommending a runtime, default to the latest stable or current LTS version (e.g., PostgreSQL 18, Node.js 22 LTS or 24, .NET 10 LTS, Python 3.13). Verify the current version against an authoritative source (vendor release notes, Microsoft Learn, [endoflife.date](https://endoflife.date)) before pinning. Never propose an EOL or near-EOL version for new work. The full policy and version baseline lives in [.github/agents/engineering-standards.agent.md](.github/agents/engineering-standards.agent.md) under **Runtime & Service Versions**.
+
 ---
 
 ## When to Use Agents
