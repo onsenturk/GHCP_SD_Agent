@@ -73,6 +73,7 @@ For questions about how a service/protocol/API works, or when generating technic
 | `@adr-generator` | Creating Architectural Decision Records (ADRs) with structured formatting |
 | `@devops-expert` | DevOps practices following the infinity loop (Plan → Code → Build → Test → Release → Deploy → Operate → Monitor) |
 | `@repo-architect` | Bootstrapping or validating agentic project structures, folder hierarchies, and Copilot customization files |
+| `@search-ai-optimization-expert` | Generating SEO/AEO/GEO content, meta tags, JSON-LD, sitemap/robots, and AI-discoverable landing pages |
 
 ---
 
@@ -86,6 +87,8 @@ Skills are loaded automatically from `.github/skills/`. Use the matching skill w
 | `git-commit` | Committing changes — uses conventional commits, intelligent staging, auto-generated messages |
 | `github-issues` | Creating, updating, or managing GitHub issues (bug reports, features, labels, milestones) |
 | `architecture-blueprint-generator` | Generating architecture documentation, detecting patterns, creating visual diagrams |
+| `draw-io-diagram-generator` | Generating or editing `.drawio` / `.drawio.svg` diagrams (architecture, flowchart, sequence, ER, UML, network) with valid mxGraph XML |
+| `web-design-reviewer` | Visual QA of local or deployed sites — screenshots across viewports, detects layout/responsive/accessibility/visual-consistency issues and fixes at source |
 | `codeql` | Setting up CodeQL code scanning, GitHub Actions workflows for SAST, or CodeQL CLI |
 | `dependabot` | Configuring `dependabot.yml`, dependency update strategies, grouped updates, or security updates |
 | `secret-scanning` | Enabling secret scanning, push protection, custom patterns, or remediating secret alerts |
