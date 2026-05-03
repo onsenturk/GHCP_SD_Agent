@@ -124,19 +124,20 @@ If any section is missing, the task is incomplete.
 This repository uses Azure as its cloud platform. The following rules are **non-negotiable**:
 
 1. **Read `azure.md` first.** Before any Azure-related work, read `azure.md` in the repository root for tenant, subscription, and resource group context.
-2. **Never create, update, or delete Azure resources autonomously.** Do not run `az resource create`, `azd up`, `azd deploy`, `terraform apply`, `az group create`, `az webapp create`, or any command that mutates Azure state without explicit user approval.
-3. **Allowed Azure operations (without asking):**
+2. **If `azure.md` does not exist, create it from the template** before proceeding with any Azure work. Use the structure from this toolkit's [azure.md](../azure.md) (Tenant / Subscription / Resource Group sections with `<placeholder>` values) and ask the user to fill in the Tenant ID. Do not invent values.
+3. **Never create, update, or delete Azure resources autonomously.** Do not run `az resource create`, `azd up`, `azd deploy`, `terraform apply`, `az group create`, `az webapp create`, or any command that mutates Azure state without explicit user approval.
+4. **Allowed Azure operations (without asking):**
    - Read-only queries: `az resource list`, `az graph query`, Azure Resource Graph, Azure MCP read operations
    - Documentation lookups: Microsoft Learn MCP, Azure best practices
    - IaC authoring: generating Bicep/Terraform files locally (not deploying them)
    - Architecture planning and cost estimation
-4. **Operations that require explicit user confirmation:**
+5. **Operations that require explicit user confirmation:**
    - Any deployment (`azd up`, `azd deploy`, `terraform apply`, `az deployment`)
    - Resource creation, modification, or deletion
    - Role assignments and RBAC changes
    - DNS, networking, or firewall changes
    - Any destructive operation
-5. If `azure.md` has no Tenant ID configured, refuse Azure operations that require tenant context and ask the user to configure it.
+6. If `azure.md` has no Tenant ID configured, refuse Azure operations that require tenant context and ask the user to configure it.
 
 ---
 

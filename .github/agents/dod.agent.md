@@ -27,6 +27,7 @@ A feature, fix, or change is NOT complete unless ALL of the following are satisf
 - README.md updated (if behavior changes).
 - requirements.md updated (if scope changes).
 - architecture.md updated (if structure changes), including a Mermaid diagram illustrating the current architecture.
+- `docs/architecture.drawio` (or `.drawio.svg`) updated whenever cloud infrastructure components or their relationships change. Must use the Azure stencil library (`mxgraph.azure2.*`) per `.github/instructions/draw-io.instructions.md`. Skip only if the project has no cloud infrastructure.
 - deployment.md updated (if infra changes).
 - *(Optional)* API documentation (OpenAPI/Swagger) updated — required only when the task adds or changes public API endpoints.
 - .env.example updated (if new environment variables introduced).

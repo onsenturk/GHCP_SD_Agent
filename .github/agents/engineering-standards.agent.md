@@ -212,6 +212,7 @@ Every project must contain:
 - README.md
 - requirements.md
 - architecture.md (must include a Mermaid diagram illustrating the current architecture)
+- `docs/architecture.drawio` (or `docs/architecture.drawio.svg`) — **required when the project deploys cloud infrastructure**. Use the Azure stencil library (`mxgraph.azure2.*`) per `.github/instructions/draw-io.instructions.md`. Update whenever infra components or their relationships change. Reference/embed it from `architecture.md`.
 - deployment.md
 - .env.example
 - Infrastructure-as-Code (Bicep/Terraform)
